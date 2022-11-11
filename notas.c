@@ -27,89 +27,100 @@ int escolha;
 //--------------------------------------------------------------
 
 //[3]
-// float relatorio()
-// {
-//     do
-//     {
-//         printf("Escolha uma opcao abaixo:\n");
-//         printf("[1] - Relatorio de notas\n[2] - Relatorio de medias\n[3] - Voltar\n");
-//         scanf("%i", &escolha);
-//         switch (escolha)
-//         {
-//         case 1:
-//             // relatorioNotas();
-//             break;
+float relatorio()
+{
+    do
+    {
+        printf("Escolha uma opcao abaixo:\n");
+        printf("[1] - Relatorio de notas\n[2] - Relatorio de medias\n[3] - Voltar\n");
+        scanf("%i", &escolha);
+        switch (escolha)
+        {
+        case 1:
+            // relatorioNotas();
+            break;
 
-//         case 2:
-//             // relatorioMedias();
-//             break;
-//         }
-//     } while (escolha != 3);
-// }
+        case 2:
+            // relatorioMedias();
+            break;
+        }
+    } while (escolha != 3);
+}
 
-// //--------------------------------------------------------------
+//--------------------------------------------------------------
 
-// //[2]
-// int notas()
-// {
-//     do
-//     {
-//         printf("Escolha a opcao abaixo:");
-//         printf("[1] - Incluir nota do aluno\n[2] - Alterar nota do aluno\n[3] - Excluir nota do aluno\n[4] - Consultar notas do aluno\n[5] - Voltar\n");
-//         scanf("%i", &escolha);
-//         switch (escolha)
-//         {
-//         case 1:
-//             // incluirNota();
-//             break;
-//         case 2:
-//             // alterarNota();
-//             break;
-//         case 3:
-//             // excluirNota();
-//             break;
-//         case 4:
-//             // consultarNota();
-//             break;
-//         }
-//     } while (escolha != 5);
-// }
+//[2]
+int notas()
+{
+    do
+    {
+        printf("Escolha a opcao abaixo:");
+        printf("[1] - Incluir nota do aluno\n[2] - Alterar nota do aluno\n[3] - Excluir nota do aluno\n[4] - Consultar notas do aluno\n[5] - Voltar\n");
+        scanf("%i", &escolha);
+        switch (escolha)
+        {
+        case 1:
+            // incluirNota();
+            break;
+        case 2:
+            // alterarNota();
+            break;
+        case 3:
+            // excluirNota();
+            break;
+        case 4:
+            // consultarNota();
+            break;
+        }
+    } while (escolha != 5);
+}
 
-// //--------------------------------------------------------------
+//--------------------------------------------------------------
 
-// //[1][4]
-// int alterar()
-// {
-//     struct aluno tabela_aluno[10];
-//     int idDigitado;
-//     int i;
-//     char opcao;
-//     char nomeAlterado[50];
+//[1][5] A FAZER relatorioAluno();
 
-//     printf("Digite o codigo do aluno:\n");
-//     scanf("%i", &idDigitado);
-//     for (i = 0; i < qtd_alunos; i++)
-//     {
-//         if (tabela_aluno[i].id = idDigitado)
-//         {
-//             printf("%s", tabela_aluno[i].nome);
-//             printf("Digite um novo nome para o aluno:\n");
-//             scanf("%s", &nomeAlterado);
+//[1][4]
+void alterar()
+{
+    struct aluno tabela_aluno[10];
+    int idDigitado;
+    int i;
+    int valida;
+    char opcao[2];
+    char nomeAlterado[50];
 
-//             printf("Deseja alterar o nome aluno? [S]im ou [N]ao\n");
-//             scanf("%c", &opcao);
-//             int valida = strcmp(opcao, 'S');
-//             if (valida == 0)
-//             {
-//                 nomeAlterado[50] = tabela_aluno[qtd_alunos].nome;
-//                 printf("O nome foi alterado!");
-//             }
-//         }
-//     }
-// }
+    printf("Digite o código do aluno: ");
+    scanf("%i", &idDigitado);
+    for (i = 0; i < qtd_alunos; i++)
+    {
+        if ((tabela_aluno[i].excluido == 1) && (tabela_aluno[i].id == idDigitado))
+        {
+            printf("Aluno não existe! Já foi excluído.");
+        }
+        else if ((tabela_aluno[i].excluido == 0) && (tabela_aluno[i].id == idDigitado))
+        {
+            printf("O nome do aluno é: %s\n", tabela_aluno[i].nome);
+            printf("Digite um novo nome para o aluno: ");
+            scanf("%s", &nomeAlterado);
+            printf("Deseja alterar o nome aluno? [S]im ou [N]ão\n");
+            fgets(opcao, 2, stdin);
+
+            valida = strcmp(opcao, 'S');
+            if (valida == 0)
+            {
+                nomeAlterado[50] = tabela_aluno[qtd_alunos].nome;
+                printf("O nome foi alterado!");
+            }
+        }
+    }
+    if (qtd_alunos < idDigitado)
+    {
+        printf("Nenhum aluno foi cadastrado!\n");
+    }
+}
 
 //[1][3]
-int excluir()
+void excluir()
 {
     struct aluno tabela_aluno[10];
     int idDigitado;
@@ -127,14 +138,14 @@ int excluir()
     }
     else if (idDigitado > qtd_alunos)
     {
-        printf("Aluno não existe\n");
+        printf("Aluno não existe!\n");
     }
     else
     {
         printf("Deseja excluir o aluno? [S]im ou [N]ão\n");
         getchar();
         fgets(opcao, 2, stdin);
-        
+
         valida = strcmp(opcao, "S");
         if (valida == 0)
         {
@@ -146,8 +157,10 @@ int excluir()
                     printf("O aluno foi excluído!\n");
                     printf("%i\n", tabela_aluno[i].excluido);
                 }
-            }   
-        }else{
+            }
+        }
+        else
+        {
             printf("Retornando ao menu aluno...\n");
         }
     }
@@ -162,27 +175,31 @@ void busca()
     struct aluno tabela_aluno[10];
     int idDigitado;
     int i;
-    
+
     printf("\n------Busca de Alunos------\n");
     printf("Digite o id do aluno: ");
     scanf("%i", &idDigitado);
+    getchar();
 
-    if (tabela_aluno[idDigitado].excluido == 1)
+    // printf("%i", tabela_aluno[idDigitado].excluido);
+    for (i = 1; i <= qtd_alunos; i++)
     {
-        printf("Aluno não existe! Já foi excluído\n");
-    }
-    else if(idDigitado > qtd_alunos){
-        printf("Aluno não existe!\n");
-    }
-    else
-    {
-        for (i = 1; i <= qtd_alunos; i++)
+        if (tabela_aluno[idDigitado].id != idDigitado)
         {
-            if (tabela_aluno[i].id == idDigitado)
-            {
-                printf("O nome do aluno é: %s", tabela_aluno[idDigitado].nome);
-            }
+            printf("Aluno não existe!\n");
         }
+        else if ((tabela_aluno[i].excluido == 1) && (tabela_aluno[i].id == idDigitado))
+        {
+            printf("Aluno não existe! Já foi excluído\n");
+        }
+        else if ((tabela_aluno[i].excluido == 0) && (tabela_aluno[i].id == idDigitado))
+        {
+            printf("O nome do aluno é: %s", tabela_aluno[idDigitado].nome);
+        }
+    }
+    if (qtd_alunos == 0)
+    {
+        printf("Nenhum aluno foi cadastrado!\n");
     }
     printf("---------------------------\n");
 }
@@ -199,13 +216,13 @@ void cadastro()
 
     printf("\n------Cadastro de Alunos------\n");
     printf("Código do aluno: %i\n", qtd_alunos);
-    
+
     do
     {
         printf("Digite o nome do aluno: ");
         fgets(tabela_aluno[qtd_alunos].nome, 50, stdin);
-        
-        if (strlen(tabela_aluno[qtd_alunos].nome) <= 4) //Vericacao do tamanho do imput
+
+        if (strlen(tabela_aluno[qtd_alunos].nome) <= 4) // Vericacao do tamanho do imput
         {
             printf("O nome que você digitou é inválido! Por favor insira um nome válido.\n");
         }
@@ -220,6 +237,7 @@ void cadastro()
 //[1]
 int aluno()
 {
+    struct aluno tabela_aluno[10];
     do
     {
         printf("\n");
@@ -230,7 +248,7 @@ int aluno()
         printf("Escolha a opção acima: ");
         scanf("%i", &escolha);
         getchar();
-        
+
         switch (escolha)
         {
         case 1:
@@ -246,7 +264,7 @@ int aluno()
             // alterar();
             break;
         case 5:
-            // alg de relatorio
+            // relatorioAluno();
             break;
         }
     } while (escolha != 6);
@@ -257,8 +275,8 @@ int aluno()
 // Codigo principal que chama as funcoes
 int main()
 {
-    setlocale(LC_ALL,""); //acentuacao
-    
+    setlocale(LC_ALL, ""); // acentuacao
+
     do
     {
         printf("--Menu Principal--\n");
@@ -267,7 +285,7 @@ int main()
         printf("------------------\n");
         printf("Escolha a opção acima: ");
         scanf("%i", &escolha);
-        
+
         switch (escolha)
         {
         case 1:
