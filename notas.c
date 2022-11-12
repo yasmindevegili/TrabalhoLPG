@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <locale.h>
+#include <ctype.h>
+#include <math.h>
 
 // struct do aluno
 typedef struct aluno
@@ -8,7 +10,7 @@ typedef struct aluno
     int id;
     char nome[50];
     int excluido;
-} tabela_aluno[10];
+} tabela_aluno;
 
 // struct das notas
 typedef struct notas
@@ -16,11 +18,14 @@ typedef struct notas
     int id_aluno;
     int id_nota;
     float valor_nota;
-} tabela_notas[30];
+} tabela_notas;
 
 //--------------------------------------------------------------
 
 // definicao das variaveis globais
+
+tabela_aluno tabelas_alunos[10];
+tabela_notas tabelas_notas[30];
 int qtd_alunos = 0;
 int escolha;
 
@@ -77,94 +82,92 @@ int notas()
 
 //--------------------------------------------------------------
 
-//[1][5] A FAZER relatorioAluno();
+//[1][5]
+int relatorioAluno()
+{
+}
+
+//--------------------------------------------------------------
 
 //[1][4]
 void alterar()
 {
-    struct aluno tabela_aluno[10];
-    int idDigitado;
-    int i;
-    int valida;
+    int i, idDigitado;
     char opcao[2];
     char nomeAlterado[50];
 
+    printf("\n-----ALTERAÇÃO DE ALUNO-----\n");
     printf("Digite o código do aluno: ");
     scanf("%i", &idDigitado);
-    for (i = 0; i < qtd_alunos; i++)
+    getchar();
+    for (i = 1; i <= qtd_alunos; i++)
     {
-        if ((tabela_aluno[i].excluido == 1) && (tabela_aluno[i].id == idDigitado))
+        if ((idDigitado == tabelas_alunos[i].id) && (tabelas_alunos[i].excluido == 0))
         {
-            printf("Aluno não existe! Já foi excluído.");
-        }
-        else if ((tabela_aluno[i].excluido == 0) && (tabela_aluno[i].id == idDigitado))
-        {
-            printf("O nome do aluno é: %s\n", tabela_aluno[i].nome);
-            printf("Digite um novo nome para o aluno: ");
-            scanf("%s", &nomeAlterado);
-            printf("Deseja alterar o nome aluno? [S]im ou [N]ão\n");
+            printf("Aluno: %s\nNovo nome: ", tabelas_alunos[i].nome);
+            fgets(nomeAlterado, 50, stdin);
+            printf("Tem certeza que deseja alterar? [S]im ou [N]ão\n");
+            
             fgets(opcao, 2, stdin);
-
-            valida = strcmp(opcao, 'S');
-            if (valida == 0)
+            getchar();
+            opcao[0] = toupper(opcao[0]);
+            if (strcmp(opcao, "S") == 0)
             {
-                nomeAlterado[50] = tabela_aluno[qtd_alunos].nome;
-                printf("O nome foi alterado!");
+                strcpy(tabelas_alunos[i].nome, nomeAlterado);
+                printf("\n---Nome alterado com sucesso!---\n");
+            }
+            else if (strcmp(opcao, "N") == 0)
+            {
+                printf("Operação cancelada! Retornando ao menu aluno.\n");
+            }
+            else if ((tabelas_alunos[i].excluido == 1) && (idDigitado == tabelas_alunos[i].id))
+            {
+                printf("Aluno não existe na base! Retornando ao menu do aluno.\n");
             }
         }
     }
-    if (qtd_alunos < idDigitado)
+    if ((qtd_alunos == 0) || (idDigitado > qtd_alunos))
     {
-        printf("Nenhum aluno foi cadastrado!\n");
+        printf("Aluno não cadastrado! Retornando ao menu do aluno.\n");
     }
+    printf("---------------------------\n");
 }
 
+//--------------------------------------------------------------
+
 //[1][3]
-void excluir()
+int excluir()
 {
-    struct aluno tabela_aluno[10];
-    int idDigitado;
-    int i;
+    int i, idDigitado, valida;
     char opcao[2];
-    int valida;
 
-    printf("\n-----Exclusão de Alunos-----\n");
-    printf("Digite o código do aluno:\n");
+    printf("\n-----EXCLUSÃO DE ALUNO-----\n");
+    printf("Digite o código do aluno: ");
     scanf("%i", &idDigitado);
-
-    if (tabela_aluno[idDigitado].excluido == 1)
+    for (i = 1; i <= qtd_alunos; i++)
     {
-        printf("Aluno não existe na base! Já foi excluído.\n");
-    }
-    else if (idDigitado > qtd_alunos)
-    {
-        printf("Aluno não existe!\n");
-    }
-    else
-    {
-        printf("Deseja excluir o aluno? [S]im ou [N]ão\n");
-        getchar();
-        fgets(opcao, 2, stdin);
-
-        valida = strcmp(opcao, "S");
-        if (valida == 0)
+        if ((idDigitado == tabelas_alunos[i].id) && (tabelas_alunos[i].excluido == 0))
         {
-            for (i = 1; i <= qtd_alunos; i++)
+            printf("Tem certeza que deseja excluir? [S]im ou [N]ão\n");
+            getchar();
+            fgets(opcao, 2, stdin);
+            opcao[0] = toupper(opcao[0]);
+            if (strcmp(opcao, "S") == 0)
             {
-                if (tabela_aluno[i].id = idDigitado)
-                {
-                    tabela_aluno[i].excluido = 1;
-                    printf("O aluno foi excluído!\n");
-                    printf("%i\n", tabela_aluno[i].excluido);
-                }
+                tabelas_alunos[i].excluido = 1;
+                printf("---Aluno deletado com sucesso!---\n");
+            }
+            else
+            {
+                printf("Operação cancelada! Retornando ao menu aluno.\n");
             }
         }
-        else
-        {
-            printf("Retornando ao menu aluno...\n");
-        }
     }
-    printf("----------------------------\n");
+    if ((qtd_alunos == 0) || (idDigitado > qtd_alunos) || (tabelas_alunos[i].id == 1))
+    {
+        printf("Aluno não cadastrado! Retornando ao menu do aluno.\n");
+    }
+    printf("---------------------------\n");
 }
 
 //--------------------------------------------------------------
@@ -172,34 +175,26 @@ void excluir()
 //[1][2]
 void busca()
 {
-    struct aluno tabela_aluno[10];
-    int idDigitado;
-    int i;
+    int i, idDigitado;
 
-    printf("\n------Busca de Alunos------\n");
+    printf("\n------BUSCA DE ALUNOS------\n");
     printf("Digite o id do aluno: ");
     scanf("%i", &idDigitado);
     getchar();
-
-    // printf("%i", tabela_aluno[idDigitado].excluido);
     for (i = 1; i <= qtd_alunos; i++)
     {
-        if (tabela_aluno[idDigitado].id != idDigitado)
+        if ((idDigitado == tabelas_alunos[i].id) && (tabelas_alunos[i].excluido == 0))
         {
-            printf("Aluno não existe!\n");
+            printf("Aluno: %s", tabelas_alunos[i].nome);
         }
-        else if ((tabela_aluno[i].excluido == 1) && (tabela_aluno[i].id == idDigitado))
+        else if ((tabelas_alunos[i].excluido == 1) && (idDigitado == tabelas_alunos[i].id))
         {
-            printf("Aluno não existe! Já foi excluído\n");
-        }
-        else if ((tabela_aluno[i].excluido == 0) && (tabela_aluno[i].id == idDigitado))
-        {
-            printf("O nome do aluno é: %s", tabela_aluno[idDigitado].nome);
+            printf("Aluno não existe na base! Retornando ao menu do aluno.\n");
         }
     }
-    if (qtd_alunos == 0)
+    if ((qtd_alunos == 0) || (idDigitado > qtd_alunos))
     {
-        printf("Nenhum aluno foi cadastrado!\n");
+        printf("Aluno não cadastrado! Retornando ao menu do aluno.\n");
     }
     printf("---------------------------\n");
 }
@@ -209,27 +204,23 @@ void busca()
 //[1][1]
 void cadastro()
 {
-    struct aluno tabela_aluno[10];
     qtd_alunos++;
-    tabela_aluno[qtd_alunos].id = qtd_alunos;
-    tabela_aluno[qtd_alunos].excluido = 0;
+    tabelas_alunos[qtd_alunos].id = qtd_alunos;
 
-    printf("\n------Cadastro de Alunos------\n");
+    printf("\n------CADASTRO DE ALUNOS------\n");
     printf("Código do aluno: %i\n", qtd_alunos);
-
     do
     {
         printf("Digite o nome do aluno: ");
-        fgets(tabela_aluno[qtd_alunos].nome, 50, stdin);
-
-        if (strlen(tabela_aluno[qtd_alunos].nome) <= 4) // Vericacao do tamanho do imput
+        fgets(tabelas_alunos[qtd_alunos].nome, 50, stdin);
+        if (strlen(tabelas_alunos[qtd_alunos].nome) <= 4)
         {
-            printf("O nome que você digitou é inválido! Por favor insira um nome válido.\n");
+            printf("O nome digitado é inválido. Tente novamente.\n");
         }
-
-    } while (strlen(tabela_aluno[qtd_alunos].nome) <= 4);
-
-    printf("\n-Aluno cadastrado com sucesso!-\n\n");
+    } while (strlen(tabelas_alunos[qtd_alunos].nome) <= 4);
+    tabelas_alunos[qtd_alunos].excluido = 0; // ativação do cadastro
+    printf("\n-Aluno cadastrado com sucesso!-\n");
+    printf("---------------------------\n");
 }
 
 //--------------------------------------------------------------
@@ -237,7 +228,6 @@ void cadastro()
 //[1]
 int aluno()
 {
-    struct aluno tabela_aluno[10];
     do
     {
         printf("\n");
@@ -261,10 +251,10 @@ int aluno()
             excluir();
             break;
         case 4:
-            // alterar();
+            alterar();
             break;
         case 5:
-            // relatorioAluno();
+            relatorioAluno();
             break;
         }
     } while (escolha != 6);
@@ -292,10 +282,10 @@ int main()
             aluno();
             break;
         case 2:
-            // notas();
+            notas();
             break;
         case 3:
-            // relatorio();
+            relatorio();
             break;
         }
     } while (escolha != 4);
