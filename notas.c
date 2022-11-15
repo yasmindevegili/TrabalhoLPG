@@ -273,7 +273,7 @@ void incluirNota()
         }else if((tabelas_alunos[i].id == idDigitado) && (tabelas_alunos[i].excluido == 1)){
             printf("Aluno não existe na base! Retornando ao menu das notas.\n");
         }
-        else if(tabelas_alunos[i].qtd_notas >= 3){
+        else if((tabelas_alunos[i].id == idDigitado) && (tabelas_alunos[i].excluido == 0) && (tabelas_alunos[i].qtd_notas > 3)){
         	printf("As notas do aluno já foram cadastradas\n");
 		}
     }
