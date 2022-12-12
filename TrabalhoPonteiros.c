@@ -2,10 +2,11 @@
 #include <locale.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 typedef struct aluno
 {
-    char id[50];
+    int id;
     char nome[100];
 } tabela_aluno;
 
@@ -30,7 +31,7 @@ void relatorioAluno()
     printf("-----------------------------\n");
     printf("|   ID  |       NOME        |\n");
 	for(i=1; i <= qtd_alunos; i++){
-		printf("|   %s\t|", tabelas_alunos[i].id);
+		printf("|   %d\t|", tabelas_alunos[i].id);
 		printf("      %s\t    |", tabelas_alunos[i].nome);
 	}
     printf("\n---------------------------\n");
@@ -41,11 +42,11 @@ void relatorioAluno()
 void busca()
 {
     //variaveis
-    char idDigitado[50];
+    int idDigitado;
 
     printf("\n------BUSCA DE ALUNOS------\n");
     printf("Digite o id do aluno: ");
-    fgets(idDigitado, 50, stdin);
+    scanf("%d", &idDigitado);
     getchar();
     for (i = 1; i <= qtd_alunos; i++)
     {
@@ -103,40 +104,25 @@ int main()
     FILE *entrada;
     char imput[100];
     const char s[2] = ";";
-    const char *token, *result;
+    const char *token;
     
     //abertura da file
     entrada = fopen("registros.txt", "r");
 
     //lendo linha por linha
-    if (entrada == NULL)
-    {
-        printf("Problema na criação do arquivo");
+    while (fgets(imput, 200, entrada))
+    {   
+        token = strtok(imput, s);
+        printf("%s\n", token);
+        tabelas_alunos[i].id = atoi(token);
+        token = strtok(NULL, "\n");
+        strcpy(tabelas_alunos[i].nome, token);
+        i++;
+        
+
     }
-    else{
-        i = 1;
-        while (!feof(entrada))
-        {
-            result = fgets(imput, 100, entrada);
-            if (result)
-            {
-                //separando id de nome pelo ;
-                token = strtok(imput, s);
-                strcpy(tabelas_alunos[i].id, token);
-                //while( token != NULL ) {
-                    printf( " %s\n", token);
-                    
-                    token = strtok(NULL, s);
-                    printf( " %s\n", token);
-                    strcpy(tabelas_alunos[i].nome, token);
-                //}
-                i++;
-            }
-        }
-    }
-    //teste para saber se as váriavies estão sendo gravadas dentro da struct
-    printf("%s", tabelas_alunos[1].id);
-    printf("%s", tabelas_alunos[3].nome);
+   
+    menu();
     
     //fechando o arquivo
     fclose(entrada);
