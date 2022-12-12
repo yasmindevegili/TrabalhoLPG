@@ -30,9 +30,10 @@ void relatorioAluno()
     printf("_____________________________\n");
     printf("-----------------------------\n");
     printf("|   ID  |       NOME        |\n");
-	for(i=1; i <= qtd_alunos; i++){
-		printf("|   %d\t|", tabelas_alunos[i].id);
-		printf("      %s\t    |", tabelas_alunos[i].nome);
+	for(i=0; i < qtd_alunos; i++){
+		printf("|%d|", tabelas_alunos[i].id);
+		printf("%s|", tabelas_alunos[i].nome);
+		printf("\n");
 	}
     printf("\n---------------------------\n");
     printf("______________________________ Gerado em %d/%d/%d %i:%i:%i\n", data_hora_atual->tm_mday, data_hora_atual->tm_mon+1, data_hora_atual->tm_year+1900, data_hora_atual->tm_hour, data_hora_atual->tm_min, data_hora_atual->tm_sec);
@@ -48,14 +49,11 @@ void busca()
     printf("Digite o id do aluno: ");
     scanf("%d", &idDigitado);
     getchar();
-    for (i = 1; i <= qtd_alunos; i++)
+    for (i = 0; i <= qtd_alunos; i++)
     {
         if (idDigitado == tabelas_alunos[i].id)
         {
             printf("Aluno: %s\n", tabelas_alunos[i].nome);
-        }
-        else{
-            printf("Aluno não encontrado!\n");
         }
     }
     printf("---------------------------\n");
@@ -107,23 +105,26 @@ int main()
     const char *token;
     
     //abertura da file
-    entrada = fopen("registros.txt", "r");
+    entrada = fopen("nomes.txt", "r");
 
     //lendo linha por linha
-    while (fgets(imput, 200, entrada))
-    {   
+    while (fgets(imput, 100, entrada)){  
+        
+        
+        //printf("%s\n", imput);
+        //Realiza leitura até final da linha
         token = strtok(imput, s);
-        printf("%s\n", token);
         tabelas_alunos[i].id = atoi(token);
         token = strtok(NULL, "\n");
         strcpy(tabelas_alunos[i].nome, token);
+        //tabelas_alunos[i].nome == token;
         i++;
-        
-
     }
-   
-    menu();
-    
     //fechando o arquivo
     fclose(entrada);
+    menu();
+    
+
+    
+    return 0;
 }
